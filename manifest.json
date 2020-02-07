@@ -10,5 +10,12 @@
   "browser_action": {
     "default_title": "Get Markdown URL"
   },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+F"
+      }
+    }
+  },
   "manifest_version": 2
 }
