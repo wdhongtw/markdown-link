@@ -13,4 +13,17 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     document.execCommand('copy');
 
     element.remove();
+
+    chrome.browserAction.setBadgeText({
+        text: "Done",
+        tabId: tab.id
+    });
+
+    var clear_callback = function () {
+        chrome.browserAction.setBadgeText({
+            text: "",
+            tabId: tab.id
+        });
+    };
+    window.setTimeout(clear_callback, 1500);
 });
