@@ -1,7 +1,10 @@
 {
   "name": "Markdown Link",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Copy Markdown link for current tab.",
+  "icons": {
+    "128": "images/icon-128.png"
+  },
   "permissions": ["activeTab", "clipboardWrite"],
     "background": {
       "scripts": ["background.js"],

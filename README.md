@@ -26,3 +26,4 @@ Use `Alt` + `F` To as a shortcut to activate this action.
 - [What are extensions? - Google Chrome](https://developer.chrome.com/extensions)
 - [Sample Extensions - Google Chrome](https://developer.chrome.com/extensions/samples#search:)
 - [Clipboard Copy / Paste on Content script (Chrome Extension) - Stack Overflow](https://stackoverflow.com/questions/25622359/clipboard-copy-paste-on-content-script-chrome-extension)
+- [dcurtis/markdown-mark: Use this mark to identify Markdown.](https://github.com/dcurtis/markdown-mark)
