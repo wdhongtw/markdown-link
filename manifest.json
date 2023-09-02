@@ -1,15 +1,28 @@
 {
   "name": "Markdown Link",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Copy Markdown link for current tab.",
   "icons": {
     "128": "images/icon-128.png"
   },
-  "permissions": ["activeTab", "clipboardWrite"],
-    "background": {
-      "scripts": ["background.js"],
-      "persistent": false
-    },
+  "permissions": [
+    "storage",
+    "tabs",
+    "downloads",
+    "activeTab",
+    "clipboardWrite"
+  ],
+  "background": {
+    "scripts": [
+      "background.js",
+      "common.js"
+    ],
+    "persistent": false
+  },
+  "options_ui": {
+    "chrome_style": true,
+    "page": "options.html"
+  },
   "browser_action": {
     "default_title": "Get Markdown URL"
   },

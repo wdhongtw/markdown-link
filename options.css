@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 1200px;
+}
+
+#app button {
+    width: 27%;
+    padding: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+h1,
+h2,
+h4 {
+    text-align: center;
+}
+
+/* Fieldsets */
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.up-down-arrow {
+    cursor: move;
+    font-size: 25px;
+    vertical-align: sub;
+}
+
+#fieldsets-header,
+#list-of-fieldsets {
+    text-align: center;
+}
+
+#fieldsets-header label {
+    display: inline-block;
+}
+
+#fieldsets-header label,
+#list-of-fieldsets input {
+    width: 30%;
+}
+
+.remove-fieldset-button {
+    color: #f00;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+/* Buttons */
+
+#buttons-wrapper {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+#buttons-wrapper button {
+    width: 10%;
+}
+
+#save-button {
+    position: relative;
+}
+
+#saved-notification {
+    position: absolute;
+    top: 3px;
+    left: -40px;
+}
+
+hr {
+    width: 3%;
+}
+
+::selection {
+    background: #000;
+    color: #fff;
+}
