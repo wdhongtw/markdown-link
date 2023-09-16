@@ -10,13 +10,6 @@
  * @property {Rule[]} rules
  */
 
-/** @type {Rule} */
-const defaultRules = {
-    url: ".*",
-    search: "(.*)",
-    replace: "$1",
-};
-
 async function initApplication() {
     // Elements
 
@@ -133,7 +126,15 @@ async function initApplication() {
     });
 
     // Events - Load defaults
-    buttonReset.addEventListener("click", () => setRules([defaultRules]));
+    buttonReset.addEventListener("click", () => {
+        /** @type {Rule} */
+        const defaultRule = {
+            url: ".*",
+            search: "(.*)",
+            replace: "$1",
+        };
+        setRules([defaultRule]);
+    });
 
     // Events - Export
     buttonExport.addEventListener("click", async () => {
