@@ -21,6 +21,11 @@ The link text is generated from current tab title.
 Use `Alt` + `F` To as a shortcut to activate this action.
 (You can change this key binding in <chrome://extensions/> )
 
+## Contributors
+
+- `wdhongtw`
+- `JayBeeDe`
+
 ## Reference
 
 - [What are extensions? - Google Chrome](https://developer.chrome.com/extensions)
