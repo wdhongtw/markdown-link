@@ -1,0 +1,58 @@
+:root {
+    --main-bg-color: #ecf1f4;
+    --main-color: #242225;
+    --warn-color: #a8140c;
+    --line-color: #3b383c;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+body {
+    width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0vh;
+    margin-bottom: 0vh;
+}
+
+#app {
+    padding: 1em;
+    flex-direction: row;
+    justify-items: center;
+    background-color: var(--main-bg-color);
+    color: var(--main-color);
+}
+
+#list-of-rule {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+#buttons-wrapper {
+    display: flex;
+    justify-content: space-around;
+}
+
+.rule-row {
+    display: flex;
+    justify-content: space-around;
+}
+
+.remove-rule-button {
+    color: var(--warn-color);
+    cursor: pointer;
+}
+
+hr {
+    width: 90%;
+}
+
+button {
+    border-radius: 0.2em;
+    border-width: thin;
+    border-color: var(--line-color);
+    color: var(--main-color);
+}
