@@ -36,13 +36,7 @@ async function tabToMarkdownLint(tab) {
 
         var link = "[" + title + "](" + tab.url + ")";
 
-        let input = document.createElement("textarea");
-        document.body.appendChild(input);
-        input.value = link;
-        input.focus();
-        input.select();
-        document.execCommand("copy");
-        input.remove();
+        navigator.clipboard.writeText(link);
     });
 }
 
