@@ -32,7 +32,7 @@ async function tabToMarkdownLint(tab) {
         break;
     }
 
-    var link = "[" + title + "](" + tab.url + ")";
+    const link = "[" + title + "](" + tab.url + ")";
 
     navigator.clipboard.writeText(link);
 }
