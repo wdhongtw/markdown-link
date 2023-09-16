@@ -24,7 +24,6 @@ window.addEventListener('DOMContentLoaded', () => {
         setFieldsets(storage.fieldsets);
         if (document.querySelectorAll('.remove-fieldset-button').length === 1) {
             document.querySelector('.remove-fieldset-button').classList.add('hidden');
-            document.querySelector('.up-down-arrow').classList.add('invisible');
         }
     });
 
@@ -33,7 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
         // Remove old fieldsets
-        const oldFieldsets = listOfFieldsets.querySelectorAll('li');
+        const oldFieldsets = listOfFieldsets.querySelectorAll('.rule-row');
         for (let i = 0; i < oldFieldsets.length; i++) {
             oldFieldsets[i].remove();
         }
@@ -81,7 +80,6 @@ window.addEventListener('DOMContentLoaded', () => {
     addButton.addEventListener('click', () => {
         listOfFieldsets.appendChild(fieldsetTemplate.content.cloneNode(true));
         document.querySelector('.remove-fieldset-button').classList.remove('hidden');
-        document.querySelector('.up-down-arrow').classList.remove('invisible');
     });
 
     // Events - Save fieldsets
@@ -90,7 +88,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const data = {
             fieldsets: [],
         };
-        const fieldsets = listOfFieldsets.querySelectorAll('li');
+        const fieldsets = listOfFieldsets.querySelectorAll('.rule-row');
         for (let i = 0; i < fieldsets.length; i++) {
             data.fieldsets.push({
                 url: fieldsets[i].querySelector('.url').value,
@@ -111,13 +109,10 @@ window.addEventListener('DOMContentLoaded', () => {
         if (removeFieldSetButton.classList.contains('remove-fieldset-button')) {
             removeFieldSetButton.parentElement.remove();
             const firstRemoveFieldsetButton = document.querySelector('.remove-fieldset-button');
-            const firstUpDownArrow = document.querySelector('.up-down-arrow');
             if (document.querySelectorAll('.remove-fieldset-button').length === 1) {
                 firstRemoveFieldsetButton.classList.add('hidden');
-                firstUpDownArrow.classList.add('invisible');
             } else {
                 firstRemoveFieldsetButton.classList.remove('hidden');
-                firstUpDownArrow.classList.remove('invisible');
             }
         }
     });

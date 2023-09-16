@@ -1,92 +1,58 @@
-@charset "utf-8";
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    width: 1200px;
-}
-
-#app button {
-    width: 27%;
-    padding: 0;
+:root {
+    --main-bg-color: #ecf1f4;
+    --main-color: #242225;
+    --warn-color: #a8140c;
+    --line-color: #3b383c;
 }
 
 .hidden {
-    display: none !important;
-}
-
-.invisible {
     visibility: hidden;
 }
 
-h1,
-h2,
-h4 {
-    text-align: center;
+body {
+    width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0vh;
+    margin-bottom: 0vh;
 }
 
-/* Fieldsets */
-
-ul {
-    list-style: none;
-    padding-left: 0;
+#app {
+    padding: 1em;
+    flex-direction: row;
+    justify-items: center;
+    background-color: var(--main-bg-color);
+    color: var(--main-color);
 }
 
-.up-down-arrow {
-    cursor: move;
-    font-size: 25px;
-    vertical-align: sub;
-}
-
-#fieldsets-header,
 #list-of-fieldsets {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
 }
-
-#fieldsets-header label {
-    display: inline-block;
-}
-
-#fieldsets-header label,
-#list-of-fieldsets input {
-    width: 30%;
-}
-
-.remove-fieldset-button {
-    color: #f00;
-    cursor: pointer;
-    font-size: 17px;
-}
-
-/* Buttons */
 
 #buttons-wrapper {
     display: flex;
-    justify-content: space-between;
-    text-align: center;
+    justify-content: space-around;
 }
 
-#buttons-wrapper button {
-    width: 10%;
+.rule-row {
+    display: flex;
+    justify-content: space-around;
 }
 
-#save-button {
-    position: relative;
-}
-
-#saved-notification {
-    position: absolute;
-    top: 3px;
-    left: -40px;
+.remove-fieldset-button {
+    color: var(--warn-color);
+    cursor: pointer;
 }
 
 hr {
-    width: 3%;
+    width: 90%;
 }
 
-::selection {
-    background: #000;
-    color: #fff;
+button {
+    border-radius: 0.2em;
+    border-width: thin;
+    border-color: var(--line-color);
+    color: var(--main-color);
 }

@@ -16,7 +16,8 @@
     "service_worker": "background.js"
   },
   "options_ui": {
-    "page": "options.html"
+    "page": "options.html",
+    "open_in_tab": true
   },
   "action": {
     "default_title": "Get Markdown URL"
