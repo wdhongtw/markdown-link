@@ -1,24 +1,33 @@
 {
   "name": "Markdown Link",
-  "version": "0.2.1",
-  "description": "Copy Markdown link for current tab.",
+  "version": "0.3.0",
+  "description": "Copy Markdown link for current tab",
   "icons": {
     "128": "images/icon-128.png"
   },
-  "permissions": ["activeTab", "clipboardWrite"],
-    "background": {
-      "scripts": ["background.js"],
-      "persistent": false
-    },
-  "browser_action": {
+  "permissions": [
+    "activeTab",
+    "clipboardWrite",
+    "downloads",
+    "scripting",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options.html"
+  },
+  "action": {
     "default_title": "Get Markdown URL"
   },
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Alt+F"
-      }
+      },
+      "description": "Copy Markdown link for current tab"
     }
   },
-  "manifest_version": 2
+  "manifest_version": 3
 }
