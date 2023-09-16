@@ -3,7 +3,6 @@ function delay(t, val) {
 }
 
 async function displayBadge(tab) {
-    // Display badge text
     chrome.action.setBadgeText({
         text: "Done",
         tabId: tab.id,
@@ -17,14 +16,10 @@ async function displayBadge(tab) {
 }
 
 async function tabToMarkdownLint(tab) {
-    /**
-     * @type string
-     */
+    /** @type {string} */
     let title = tab.title;
 
-    /**
-     * @type Config
-     */
+    /** @type {Config} */
     const config = await chrome.storage.sync.get();
     for (const rule of config.rules) {
         regexUrl = new RegExp(rule.url);
@@ -42,7 +37,6 @@ async function tabToMarkdownLint(tab) {
     navigator.clipboard.writeText(link);
 }
 
-// Listen for click event
 chrome.action.onClicked.addListener(function (tab) {
     displayBadge(tab);
     chrome.scripting.executeScript({

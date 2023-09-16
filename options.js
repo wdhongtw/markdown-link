@@ -10,9 +10,7 @@
  * @property {Rule[]} rules
  */
 
-/**
- * @type Rule
- */
+/** @type {Rule} */
 const defaultRules = {
     url: ".*",
     search: "(.*)",
@@ -22,7 +20,9 @@ const defaultRules = {
 async function initApplication() {
     // Elements
 
+    /** @type {HTMLElement} */
     const ruleContainer = document.getElementById("list-of-rule");
+    /** @type {HTMLElement} */
     const ruleTemplate = document.getElementById("rule-template");
 
     const buttonImport = document.getElementById("import-button");
@@ -34,9 +34,7 @@ async function initApplication() {
 
     // Initialization
     await (async () => {
-        /**
-         * @type Config
-         */
+        /** @type Config */
         const config = await chrome.storage.sync.get();
         setRules(config.rules);
 
@@ -48,9 +46,8 @@ async function initApplication() {
     })();
 
     /**
-     *
+     * Populate rule container with given rules
      * @param {Rule[]} rules
-     * @returns
      */
     function setRules(rules) {
         // Remove old rules
@@ -75,7 +72,6 @@ async function initApplication() {
     // Events
 
     // Events - Add rules
-
     buttonAdd.addEventListener("click", () => {
         ruleContainer.appendChild(ruleTemplate.content.cloneNode(true));
         document
@@ -84,20 +80,15 @@ async function initApplication() {
     });
 
     // Events - Save rules
-
     buttonSave.addEventListener("click", async () => {
         const ruleNodes = ruleContainer.querySelectorAll(".rule-row");
-        /**
-         * @type {Rule[]}
-         */
+        /** @type {Rule[]} */
         const rules = [...ruleNodes].map((ruleNode) => ({
             url: ruleNode.querySelector(".url").value,
             search: ruleNode.querySelector(".search").value,
             replace: ruleNode.querySelector(".replace").value,
         }));
-        /**
-         * @type Config
-         */
+        /** @type {Config} */
         const config = { rules: rules };
         await chrome.storage.sync.set(config);
         notificationSaved.classList.remove("hidden");
@@ -105,7 +96,6 @@ async function initApplication() {
     });
 
     // Events - Remove rules
-
     ruleContainer.addEventListener("click", (eventObject) => {
         const removeRuleButton = eventObject.target;
         if (removeRuleButton.classList.contains("remove-rule-button")) {
@@ -122,7 +112,6 @@ async function initApplication() {
     });
 
     // Events - Import
-
     buttonImport.addEventListener("click", () => {
         const fileChooser = document.createElement("input");
         fileChooser.type = "file";
@@ -130,9 +119,7 @@ async function initApplication() {
             const file = fileChooser.files[0];
             const reader = new FileReader();
             reader.onload = () => {
-                /**
-                 * @type Config
-                 */
+                /** @type {Config} */
                 const config = JSON.parse("" + reader.result);
                 setRules(config.rules);
                 buttonSave.click();
@@ -146,14 +133,11 @@ async function initApplication() {
     });
 
     // Events - Load defaults
-
     buttonReset.addEventListener("click", () => setRules([defaultRules]));
 
     // Events - Export
     buttonExport.addEventListener("click", async () => {
-        /**
-         * @type Config
-         */
+        /** @type {Config} */
         const config = await chrome.storage.sync.get();
         const result = JSON.stringify(config);
         const url = "data:application/json;base64," + btoa(result);
