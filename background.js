@@ -1,10 +1,3 @@
-// Function to get the current tab
-async function getCurrentTab() {
-    let queryOptions = { active: true, currentWindow: true };
-    let [tab] = await chrome.tabs.query(queryOptions);
-    return tab;
-}
-
 async function displayBadge(tab) {
     // Display badge text
     chrome.action.setBadgeText({
@@ -65,16 +58,4 @@ chrome.action.onClicked.addListener(function (tab) {
             args: [tab],
         });
     }
-});
-
-// Listen for hotkey shortcut command
-chrome.commands.onCommand.addListener((_execute_action) => {
-    // Callback to wait for chrome to get the current tab and then pass the tab into the injection script for copying to clipboard
-    getCurrentTab().then(function (tab) {
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: tabToMarkdownLint,
-            args: [tab],
-        });
-    });
 });
