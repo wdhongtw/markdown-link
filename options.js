@@ -1,13 +1,7 @@
-const app = {};
-
-app.initialStorage = {
-    rules: [
-        {
-            url: ".*",
-            search: "(.*)",
-            replace: "$1",
-        },
-    ],
+const defaultRules = {
+    url: ".*",
+    search: "(.*)",
+    replace: "$1",
 };
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -48,32 +42,6 @@ window.addEventListener("DOMContentLoaded", () => {
             listOfRule.appendChild(ruleNode);
         }
     }
-
-    // Initialization - Examples
-
-    (() => {
-        for (const index in app.initialStorage.rules) {
-            const urlInput = document.createElement("input");
-            urlInput.disabled = true;
-            urlInput.className = "url";
-            urlInput.value = app.initialStorage.rules[index].url;
-
-            const searchInput = document.createElement("input");
-            searchInput.disabled = true;
-            searchInput.className = "search";
-            searchInput.value = app.initialStorage.rules[index].search;
-
-            const replaceInput = document.createElement("input");
-            replaceInput.disabled = true;
-            replaceInput.className = "replace";
-            replaceInput.value = app.initialStorage.rules[index].replace;
-
-            const li = document.createElement("li");
-            li.appendChild(urlInput);
-            li.appendChild(searchInput);
-            li.appendChild(replaceInput);
-        }
-    })();
 
     // Events
 
@@ -148,7 +116,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     document
         .getElementById("load-defaults-button")
-        .addEventListener("click", () => setRules(app.initialStorage.rules));
+        .addEventListener("click", () => setRules([defaultRules]));
 
     // Events - Export
     document.getElementById("export-button").addEventListener("click", () => {
