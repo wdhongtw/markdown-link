@@ -1,45 +1,62 @@
+/**
+ * @typedef {Object} Rule
+ * @property {string} url
+ * @property {string} search
+ * @property {string} replace
+ */
+
+/**
+ * @type Rule
+ */
 const defaultRules = {
     url: ".*",
     search: "(.*)",
     replace: "$1",
 };
 
-window.addEventListener("DOMContentLoaded", () => {
+async function initApplication() {
     // Elements
 
-    const listOfRule = document.getElementById("list-of-rule");
+    const ruleContainer = document.getElementById("list-of-rule");
     const ruleTemplate = document.getElementById("rule-template");
-    const addButton = document.getElementById("add-button");
-    const saveButton = document.getElementById("save-button");
-    const savedNotification = document.getElementById("saved-notification");
+
+    const buttonImport = document.getElementById("import-button");
+    const buttonExport = document.getElementById("export-button");
+    const buttonReset = document.getElementById("load-defaults-button");
+    const buttonAdd = document.getElementById("add-button");
+    const buttonSave = document.getElementById("save-button");
+    const notificationSaved = document.getElementById("saved-notification");
 
     // Initialization
-
-    chrome.storage.sync.get(null, (storage) => {
+    await (async () => {
+        const storage = await chrome.storage.sync.get(null);
         setRules(storage.rules);
+
         if (document.querySelectorAll(".remove-rule-button").length === 1) {
             document
                 .querySelector(".remove-rule-button")
                 .classList.add("hidden");
         }
-    });
+    })();
 
+    /**
+     *
+     * @param {Rule[]} rules
+     * @returns
+     */
     function setRules(rules) {
-        if (!rules) {
-            return;
-        }
         // Remove old rules
-        const oldRules = listOfRule.querySelectorAll(".rule-row");
-        for (let i = 0; i < oldRules.length; i++) {
-            oldRules[i].remove();
+        const ruleNodes = ruleContainer.querySelectorAll(".rule-row");
+        for (const ruleNode of ruleNodes) {
+            ruleNode.remove();
         }
         // Add new rules
-        for (let index in rules) {
-            let ruleNode = ruleTemplate.content.cloneNode(true);
-            ruleNode.querySelector(".url").value = rules[index].url;
-            ruleNode.querySelector(".search").value = rules[index].search;
-            ruleNode.querySelector(".replace").value = rules[index].replace;
-            listOfRule.appendChild(ruleNode);
+        for (const rule of rules) {
+            const ruleNode = ruleTemplate.content.cloneNode(true);
+            ruleNode.querySelector(".url").value = rule.url;
+            ruleNode.querySelector(".search").value = rule.search;
+            ruleNode.querySelector(".replace").value = rule.replace;
+            ruleContainer.appendChild(ruleNode);
         }
     }
 
@@ -47,8 +64,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Events - Add rules
 
-    addButton.addEventListener("click", () => {
-        listOfRule.appendChild(ruleTemplate.content.cloneNode(true));
+    buttonAdd.addEventListener("click", () => {
+        ruleContainer.appendChild(ruleTemplate.content.cloneNode(true));
         document
             .querySelector(".remove-rule-button")
             .classList.remove("hidden");
@@ -56,27 +73,30 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Events - Save rules
 
-    saveButton.addEventListener("click", () => {
+    buttonSave.addEventListener("click", async () => {
+        /**
+         * @type {Rule[]}
+         */
+        const rules = [];
         const data = {
-            rules: [],
+            rules: rules,
         };
-        const rules = listOfRule.querySelectorAll(".rule-row");
-        for (let i = 0; i < rules.length; i++) {
+        const ruleNodes = ruleContainer.querySelectorAll(".rule-row");
+        for (const ruleNode of ruleNodes) {
             data.rules.push({
-                url: rules[i].querySelector(".url").value,
-                search: rules[i].querySelector(".search").value,
-                replace: rules[i].querySelector(".replace").value,
+                url: ruleNode.querySelector(".url").value,
+                search: ruleNode.querySelector(".search").value,
+                replace: ruleNode.querySelector(".replace").value,
             });
         }
-        chrome.storage.sync.set(data, () => {
-            savedNotification.classList.remove("hidden");
-            setTimeout(() => savedNotification.classList.add("hidden"), 1000);
-        });
+        await chrome.storage.sync.set(data);
+        notificationSaved.classList.remove("hidden");
+        setTimeout(() => notificationSaved.classList.add("hidden"), 1000);
     });
 
     // Events - Remove rules
 
-    listOfRule.addEventListener("click", (eventObject) => {
+    ruleContainer.addEventListener("click", (eventObject) => {
         const removeRuleButton = eventObject.target;
         if (removeRuleButton.classList.contains("remove-rule-button")) {
             removeRuleButton.parentElement.remove();
@@ -93,7 +113,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Events - Import
 
-    document.getElementById("import-button").addEventListener("click", () => {
+    buttonImport.addEventListener("click", () => {
         const fileChooser = document.createElement("input");
         fileChooser.type = "file";
         fileChooser.addEventListener("change", () => {
@@ -102,7 +122,7 @@ window.addEventListener("DOMContentLoaded", () => {
             reader.onload = () => {
                 const storage = JSON.parse("" + reader.result);
                 setRules(storage.rules);
-                saveButton.click();
+                buttonSave.click();
             };
             reader.readAsText(file);
             form.reset();
@@ -114,19 +134,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Events - Load defaults
 
-    document
-        .getElementById("load-defaults-button")
-        .addEventListener("click", () => setRules([defaultRules]));
+    buttonReset.addEventListener("click", () => setRules([defaultRules]));
 
     // Events - Export
-    document.getElementById("export-button").addEventListener("click", () => {
-        chrome.storage.sync.get(null, (storage) => {
-            const result = JSON.stringify(storage);
-            const url = "data:application/json;base64," + btoa(result);
-            chrome.downloads.download({
-                url: url,
-                filename: "markdown-link-config.json",
-            });
+    buttonExport.addEventListener("click", async () => {
+        const storage = await chrome.storage.sync.get(null);
+        const result = JSON.stringify(storage);
+        const url = "data:application/json;base64," + btoa(result);
+        await chrome.downloads.download({
+            url: url,
+            filename: "markdown-link-config.json",
         });
     });
-});
+}
+
+document.onreadystatechange = () => {
+    if (document.readyState === "interactive") {
+        initApplication();
+    }
+};
