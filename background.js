@@ -18,8 +18,12 @@ async function displayBadge(tab) {
 
 async function tabToMarkdownLint(tab) {
     title = tab.title;
-    const storage = await chrome.storage.sync.get(null);
-    for (const rule of storage.rules) {
+
+    /**
+     * @type Config
+     */
+    const config = await chrome.storage.sync.get();
+    for (const rule of config.rules) {
         regexUrl = new RegExp(rule.url, "gi");
         if (regexUrl.test(tab.url)) {
             regexSearch = new RegExp(rule.search, "gi");

@@ -6,6 +6,11 @@
  */
 
 /**
+ * @typedef {Object} Config
+ * @property {Rule[]} rules
+ */
+
+/**
  * @type Rule
  */
 const defaultRules = {
@@ -29,8 +34,11 @@ async function initApplication() {
 
     // Initialization
     await (async () => {
-        const storage = await chrome.storage.sync.get(null);
-        setRules(storage.rules);
+        /**
+         * @type Config
+         */
+        const config = await chrome.storage.sync.get();
+        setRules(config.rules);
 
         if (document.querySelectorAll(".remove-rule-button").length === 1) {
             document
@@ -78,18 +86,19 @@ async function initApplication() {
          * @type {Rule[]}
          */
         const rules = [];
-        const data = {
-            rules: rules,
-        };
         const ruleNodes = ruleContainer.querySelectorAll(".rule-row");
         for (const ruleNode of ruleNodes) {
-            data.rules.push({
+            rules.push({
                 url: ruleNode.querySelector(".url").value,
                 search: ruleNode.querySelector(".search").value,
                 replace: ruleNode.querySelector(".replace").value,
             });
         }
-        await chrome.storage.sync.set(data);
+        /**
+         * @type Config
+         */
+        const config = { rules: rules };
+        await chrome.storage.sync.set(config);
         notificationSaved.classList.remove("hidden");
         setTimeout(() => notificationSaved.classList.add("hidden"), 1000);
     });
@@ -120,8 +129,11 @@ async function initApplication() {
             const file = fileChooser.files[0];
             const reader = new FileReader();
             reader.onload = () => {
-                const storage = JSON.parse("" + reader.result);
-                setRules(storage.rules);
+                /**
+                 * @type Config
+                 */
+                const config = JSON.parse("" + reader.result);
+                setRules(config.rules);
                 buttonSave.click();
             };
             reader.readAsText(file);
@@ -138,8 +150,11 @@ async function initApplication() {
 
     // Events - Export
     buttonExport.addEventListener("click", async () => {
-        const storage = await chrome.storage.sync.get(null);
-        const result = JSON.stringify(storage);
+        /**
+         * @type Config
+         */
+        const config = await chrome.storage.sync.get();
+        const result = JSON.stringify(config);
         const url = "data:application/json;base64," + btoa(result);
         await chrome.downloads.download({
             url: url,
