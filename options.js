@@ -54,16 +54,20 @@ async function initApplication() {
      */
     function setRules(rules) {
         // Remove old rules
-        const ruleNodes = ruleContainer.querySelectorAll(".rule-row");
-        for (const ruleNode of ruleNodes) {
+        const oldRuleNodes = ruleContainer.querySelectorAll(".rule-row");
+        for (const ruleNode of oldRuleNodes) {
             ruleNode.remove();
         }
-        // Add new rules
-        for (const rule of rules) {
+
+        const ruleNodes = rules.map((rule) => {
             const ruleNode = ruleTemplate.content.cloneNode(true);
             ruleNode.querySelector(".url").value = rule.url;
             ruleNode.querySelector(".search").value = rule.search;
             ruleNode.querySelector(".replace").value = rule.replace;
+            return ruleNode;
+        });
+        // Add new rules
+        for (const ruleNode of ruleNodes) {
             ruleContainer.appendChild(ruleNode);
         }
     }
@@ -82,18 +86,15 @@ async function initApplication() {
     // Events - Save rules
 
     buttonSave.addEventListener("click", async () => {
+        const ruleNodes = ruleContainer.querySelectorAll(".rule-row");
         /**
          * @type {Rule[]}
          */
-        const rules = [];
-        const ruleNodes = ruleContainer.querySelectorAll(".rule-row");
-        for (const ruleNode of ruleNodes) {
-            rules.push({
-                url: ruleNode.querySelector(".url").value,
-                search: ruleNode.querySelector(".search").value,
-                replace: ruleNode.querySelector(".replace").value,
-            });
-        }
+        const rules = [...ruleNodes].map((ruleNode) => ({
+            url: ruleNode.querySelector(".url").value,
+            search: ruleNode.querySelector(".search").value,
+            replace: ruleNode.querySelector(".replace").value,
+        }));
         /**
          * @type Config
          */
