@@ -30,12 +30,6 @@ async function initApplication() {
         /** @type Config */
         const config = await chrome.storage.sync.get();
         setRules(config.rules);
-
-        if (document.querySelectorAll(".remove-rule-button").length === 1) {
-            document
-                .querySelector(".remove-rule-button")
-                .classList.add("hidden");
-        }
     })();
 
     /**
@@ -67,9 +61,6 @@ async function initApplication() {
     // Events - Add rules
     buttonAdd.addEventListener("click", () => {
         ruleContainer.appendChild(ruleTemplate.content.cloneNode(true));
-        document
-            .querySelector(".remove-rule-button")
-            .classList.remove("hidden");
     });
 
     // Events - Save rules
@@ -93,14 +84,6 @@ async function initApplication() {
         const removeRuleButton = eventObject.target;
         if (removeRuleButton.classList.contains("remove-rule-button")) {
             removeRuleButton.parentElement.remove();
-            const firstRemoveRuleButton = document.querySelector(
-                ".remove-rule-button"
-            );
-            if (document.querySelectorAll(".remove-rule-button").length === 1) {
-                firstRemoveRuleButton.classList.add("hidden");
-            } else {
-                firstRemoveRuleButton.classList.remove("hidden");
-            }
         }
     });
 
