@@ -15,6 +15,15 @@
                 can customize per website some regex to transform the title of
                 the markdown link.
             </p>
+            <p>
+                If some URL (regex) pattern matches, the page title title will
+                go through the replacing process with the corresponding match
+                patten and replacement config.
+            </p>
+            <p>
+                For how to use the title replace feature, search
+                "String.prototype.replace" document for more details.
+            </p>
             <div id="buttons-wrapper">
                 <span class="hidden"></span>
                 <button id="add-button">Add</button>
@@ -29,9 +38,9 @@
         </div>
         <template id="rule-template">
             <div class="rule-row">
-                <input placeholder="Url Regex" class="url" />
-                <input placeholder="Title Search Regex Mask" class="search" />
-                <input placeholder="Title Replace Regex Mask" class="replace" />
+                <input placeholder="URL Match Pattern" class="url" />
+                <input placeholder="Title Match Pattern" class="search" />
+                <input placeholder="Title Replacement" class="replace" />
                 <span class="remove-rule-button">✗</span>
             </div>
         </template>

@@ -17,22 +17,24 @@ async function displayBadge(tab) {
 }
 
 async function tabToMarkdownLint(tab) {
-    title = tab.title;
+    /**
+     * @type string
+     */
+    let title = tab.title;
 
     /**
      * @type Config
      */
     const config = await chrome.storage.sync.get();
     for (const rule of config.rules) {
-        regexUrl = new RegExp(rule.url, "gi");
-        if (regexUrl.test(tab.url)) {
-            regexSearch = new RegExp(rule.search, "gi");
-            regexReplace = new RegExp(rule.replace, "i");
-            if (regexSearch.test(title)) {
-                title = title.replace(regexSearch, rule.replace);
-                // we don't stop in case there are several rules
-            }
-        }
+        regexUrl = new RegExp(rule.url);
+        if (!regexUrl.test(tab.url)) continue;
+
+        regexSearch = new RegExp(rule.search);
+        if (!regexSearch.test(title)) continue;
+
+        title = title.replace(regexSearch, rule.replace);
+        break;
     }
 
     var link = "[" + title + "](" + tab.url + ")";
