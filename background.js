@@ -19,15 +19,15 @@ async function displayBadge(tab) {
 async function tabToMarkdownLint(tab) {
     title = tab.title;
     const storage = await chrome.storage.sync.get(null);
-    for (index in storage.fieldsets) {
-        regexUrl = new RegExp(storage.fieldsets[index].url, "gi");
+    for (index in storage.rules) {
+        regexUrl = new RegExp(storage.rules[index].url, "gi");
         if (regexUrl.test(tab.url)) {
-            regexSearch = new RegExp(storage.fieldsets[index].search, "gi");
-            regexReplace = new RegExp(storage.fieldsets[index].replace, "i");
+            regexSearch = new RegExp(storage.rules[index].search, "gi");
+            regexReplace = new RegExp(storage.rules[index].replace, "i");
             if (regexSearch.test(title)) {
                 title = title.replace(
                     regexSearch,
-                    storage.fieldsets[index].replace
+                    storage.rules[index].replace
                 );
                 // we don't stop in case there are several rules
             }

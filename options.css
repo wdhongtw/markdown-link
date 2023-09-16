@@ -25,7 +25,7 @@ body {
     color: var(--main-color);
 }
 
-#list-of-fieldsets {
+#list-of-rule {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
@@ -41,7 +41,7 @@ body {
     justify-content: space-around;
 }
 
-.remove-fieldset-button {
+.remove-rule-button {
     color: var(--warn-color);
     cursor: pointer;
 }

@@ -1,7 +1,7 @@
 const app = {};
 
 app.initialStorage = {
-    fieldsets: [
+    rules: [
         {
             url: ".*",
             search: "(.*)",
@@ -13,8 +13,8 @@ app.initialStorage = {
 window.addEventListener("DOMContentLoaded", () => {
     // Elements
 
-    const listOfFieldsets = document.getElementById("list-of-fieldsets");
-    const fieldsetTemplate = document.getElementById("fieldset-template");
+    const listOfRule = document.getElementById("list-of-rule");
+    const ruleTemplate = document.getElementById("rule-template");
     const addButton = document.getElementById("add-button");
     const saveButton = document.getElementById("save-button");
     const savedNotification = document.getElementById("saved-notification");
@@ -22,51 +22,51 @@ window.addEventListener("DOMContentLoaded", () => {
     // Initialization
 
     chrome.storage.sync.get(null, (storage) => {
-        setFieldsets(storage.fieldsets);
-        if (document.querySelectorAll(".remove-fieldset-button").length === 1) {
+        setRules(storage.rules);
+        if (document.querySelectorAll(".remove-rule-button").length === 1) {
             document
-                .querySelector(".remove-fieldset-button")
+                .querySelector(".remove-rule-button")
                 .classList.add("hidden");
         }
     });
 
-    function setFieldsets(fieldsets) {
-        if (!fieldsets) {
+    function setRules(rules) {
+        if (!rules) {
             return;
         }
-        // Remove old fieldsets
-        const oldFieldsets = listOfFieldsets.querySelectorAll(".rule-row");
-        for (let i = 0; i < oldFieldsets.length; i++) {
-            oldFieldsets[i].remove();
+        // Remove old rules
+        const oldRules = listOfRule.querySelectorAll(".rule-row");
+        for (let i = 0; i < oldRules.length; i++) {
+            oldRules[i].remove();
         }
-        // Add new fieldsets
-        for (let index in fieldsets) {
-            let fieldset = fieldsetTemplate.content.cloneNode(true);
-            fieldset.querySelector(".url").value = fieldsets[index].url;
-            fieldset.querySelector(".search").value = fieldsets[index].search;
-            fieldset.querySelector(".replace").value = fieldsets[index].replace;
-            listOfFieldsets.appendChild(fieldset);
+        // Add new rules
+        for (let index in rules) {
+            let ruleNode = ruleTemplate.content.cloneNode(true);
+            ruleNode.querySelector(".url").value = rules[index].url;
+            ruleNode.querySelector(".search").value = rules[index].search;
+            ruleNode.querySelector(".replace").value = rules[index].replace;
+            listOfRule.appendChild(ruleNode);
         }
     }
 
     // Initialization - Examples
 
     (() => {
-        for (const index in app.initialStorage.fieldsets) {
+        for (const index in app.initialStorage.rules) {
             const urlInput = document.createElement("input");
             urlInput.disabled = true;
             urlInput.className = "url";
-            urlInput.value = app.initialStorage.fieldsets[index].url;
+            urlInput.value = app.initialStorage.rules[index].url;
 
             const searchInput = document.createElement("input");
             searchInput.disabled = true;
             searchInput.className = "search";
-            searchInput.value = app.initialStorage.fieldsets[index].search;
+            searchInput.value = app.initialStorage.rules[index].search;
 
             const replaceInput = document.createElement("input");
             replaceInput.disabled = true;
             replaceInput.className = "replace";
-            replaceInput.value = app.initialStorage.fieldsets[index].replace;
+            replaceInput.value = app.initialStorage.rules[index].replace;
 
             const li = document.createElement("li");
             li.appendChild(urlInput);
@@ -77,27 +77,27 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Events
 
-    // Events - Add fieldset
+    // Events - Add rules
 
     addButton.addEventListener("click", () => {
-        listOfFieldsets.appendChild(fieldsetTemplate.content.cloneNode(true));
+        listOfRule.appendChild(ruleTemplate.content.cloneNode(true));
         document
-            .querySelector(".remove-fieldset-button")
+            .querySelector(".remove-rule-button")
             .classList.remove("hidden");
     });
 
-    // Events - Save fieldsets
+    // Events - Save rules
 
     saveButton.addEventListener("click", () => {
         const data = {
-            fieldsets: [],
+            rules: [],
         };
-        const fieldsets = listOfFieldsets.querySelectorAll(".rule-row");
-        for (let i = 0; i < fieldsets.length; i++) {
-            data.fieldsets.push({
-                url: fieldsets[i].querySelector(".url").value,
-                search: fieldsets[i].querySelector(".search").value,
-                replace: fieldsets[i].querySelector(".replace").value,
+        const rules = listOfRule.querySelectorAll(".rule-row");
+        for (let i = 0; i < rules.length; i++) {
+            data.rules.push({
+                url: rules[i].querySelector(".url").value,
+                search: rules[i].querySelector(".search").value,
+                replace: rules[i].querySelector(".replace").value,
             });
         }
         chrome.storage.sync.set(data, () => {
@@ -106,22 +106,19 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Events - Remove fieldset
+    // Events - Remove rules
 
-    listOfFieldsets.addEventListener("click", (eventObject) => {
-        const removeFieldSetButton = eventObject.target;
-        if (removeFieldSetButton.classList.contains("remove-fieldset-button")) {
-            removeFieldSetButton.parentElement.remove();
-            const firstRemoveFieldsetButton = document.querySelector(
-                ".remove-fieldset-button"
+    listOfRule.addEventListener("click", (eventObject) => {
+        const removeRuleButton = eventObject.target;
+        if (removeRuleButton.classList.contains("remove-rule-button")) {
+            removeRuleButton.parentElement.remove();
+            const firstRemoveRuleButton = document.querySelector(
+                ".remove-rule-button"
             );
-            if (
-                document.querySelectorAll(".remove-fieldset-button").length ===
-                1
-            ) {
-                firstRemoveFieldsetButton.classList.add("hidden");
+            if (document.querySelectorAll(".remove-rule-button").length === 1) {
+                firstRemoveRuleButton.classList.add("hidden");
             } else {
-                firstRemoveFieldsetButton.classList.remove("hidden");
+                firstRemoveRuleButton.classList.remove("hidden");
             }
         }
     });
@@ -136,7 +133,7 @@ window.addEventListener("DOMContentLoaded", () => {
             const reader = new FileReader();
             reader.onload = () => {
                 const storage = JSON.parse("" + reader.result);
-                setFieldsets(storage.fieldsets);
+                setRules(storage.rules);
                 saveButton.click();
             };
             reader.readAsText(file);
@@ -151,9 +148,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     document
         .getElementById("load-defaults-button")
-        .addEventListener("click", () =>
-            setFieldsets(app.initialStorage.fieldsets)
-        );
+        .addEventListener("click", () => setRules(app.initialStorage.rules));
 
     // Events - Export
     document.getElementById("export-button").addEventListener("click", () => {
