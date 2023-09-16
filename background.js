@@ -8,13 +8,13 @@ async function getCurrentTab() {
 async function displayBadge(tab) {
     // Display badge text
     chrome.action.setBadgeText({
-        text: 'Done',
-        tabId: tab.id
+        text: "Done",
+        tabId: tab.id,
     });
     var clear_callback = function () {
         chrome.action.setBadgeText({
-            text: '',
-            tabId: tab.id
+            text: "",
+            tabId: tab.id,
         });
     };
     setTimeout(clear_callback, 1500);
@@ -24,33 +24,38 @@ async function tabToMarkdownLint(tab) {
     title = tab.title;
     chrome.storage.sync.get(null, (storage) => {
         for (index in storage.fieldsets) {
-            regexUrl = new RegExp(storage.fieldsets[index].url, 'gi');
+            regexUrl = new RegExp(storage.fieldsets[index].url, "gi");
             if (regexUrl.test(tab.url)) {
-                regexSearch = new RegExp(storage.fieldsets[index].search, 'gi');
-                regexReplace = new RegExp(storage.fieldsets[index].replace, 'i');
+                regexSearch = new RegExp(storage.fieldsets[index].search, "gi");
+                regexReplace = new RegExp(
+                    storage.fieldsets[index].replace,
+                    "i"
+                );
                 if (regexSearch.test(title)) {
-                    title = title.replace(regexSearch, storage.fieldsets[index].replace);
+                    title = title.replace(
+                        regexSearch,
+                        storage.fieldsets[index].replace
+                    );
                     // we don't stop in case there are several rules
                 }
             }
         }
 
-        var link = '[' + title + '](' + tab.url + ')';
+        var link = "[" + title + "](" + tab.url + ")";
 
-        let input = document.createElement('textarea');
+        let input = document.createElement("textarea");
         document.body.appendChild(input);
         input.value = link;
         input.focus();
         input.select();
-        document.execCommand('copy');
+        document.execCommand("copy");
         input.remove();
     });
-
 }
 
 // Listen for click event
 chrome.action.onClicked.addListener(function (tab) {
-    regexExclude = new RegExp('^chrome://.*', 'gi');
+    regexExclude = new RegExp("^chrome://.*", "gi");
     if (!regexExclude.test(tab.url)) {
         displayBadge(tab);
         // Callback to wait for chrome to get the current tab and then pass the tab into the injection script for copying to clipboard
@@ -64,7 +69,6 @@ chrome.action.onClicked.addListener(function (tab) {
 
 // Listen for hotkey shortcut command
 chrome.commands.onCommand.addListener((_execute_action) => {
-
     // Callback to wait for chrome to get the current tab and then pass the tab into the injection script for copying to clipboard
     getCurrentTab().then(function (tab) {
         chrome.scripting.executeScript({
@@ -73,5 +77,4 @@ chrome.commands.onCommand.addListener((_execute_action) => {
             args: [tab],
         });
     });
-
 });
