@@ -8,7 +8,33 @@
 /**
  * @typedef {Object} Config
  * @property {Rule[]} rules
+ * @property {number} version
  */
+
+/**
+ * @callback MigrateFunc
+ * @param {Config} config
+ * @return {Config}
+ */
+
+async function migration() {
+    /** @type {MigrateFunc[]} */
+    const steps = [
+        (config) => {
+            if (config.version !== undefined) {
+                return config;
+            }
+            config.version = 1;
+            config.rules = [];
+            return config;
+        },
+    ];
+
+    /** @type Config */
+    const rawConfig = await chrome.storage.sync.get();
+    const config = steps.reduce((config, step) => step(config), rawConfig);
+    await chrome.storage.sync.set(config);
+}
 
 async function initApplication() {
     // Elements
@@ -27,6 +53,8 @@ async function initApplication() {
 
     // Initialization
     await (async () => {
+        await migration();
+
         /** @type Config */
         const config = await chrome.storage.sync.get();
         setRules(config.rules);
