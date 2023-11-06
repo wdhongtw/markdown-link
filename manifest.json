@@ -7,7 +7,6 @@
   },
   "permissions": [
     "activeTab",
-    "clipboardWrite",
     "scripting",
     "storage"
   ],
