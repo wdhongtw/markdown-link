@@ -44,8 +44,6 @@ async function initApplication() {
     /** @type {HTMLElement} */
     const ruleTemplate = document.getElementById("rule-template");
 
-    const buttonImport = document.getElementById("import-button");
-    const buttonExport = document.getElementById("export-button");
     const buttonReset = document.getElementById("load-defaults-button");
     const buttonAdd = document.getElementById("add-button");
     const buttonSave = document.getElementById("save-button");
@@ -115,27 +113,6 @@ async function initApplication() {
         }
     });
 
-    // Events - Import
-    buttonImport.addEventListener("click", () => {
-        const fileChooser = document.createElement("input");
-        fileChooser.type = "file";
-        fileChooser.addEventListener("change", () => {
-            const file = fileChooser.files[0];
-            const reader = new FileReader();
-            reader.onload = () => {
-                /** @type {Config} */
-                const config = JSON.parse("" + reader.result);
-                setRules(config.rules);
-                buttonSave.click();
-            };
-            reader.readAsText(file);
-            form.reset();
-        });
-        const form = document.createElement("form");
-        form.appendChild(fileChooser);
-        fileChooser.click();
-    });
-
     // Events - Load defaults
     buttonReset.addEventListener("click", () => {
         /** @type {Rule} */
@@ -145,18 +122,6 @@ async function initApplication() {
             replace: "$1",
         };
         setRules([defaultRule]);
-    });
-
-    // Events - Export
-    buttonExport.addEventListener("click", async () => {
-        /** @type {Config} */
-        const config = await chrome.storage.sync.get();
-        const result = JSON.stringify(config);
-        const url = "data:application/json;base64," + btoa(result);
-        await chrome.downloads.download({
-            url: url,
-            filename: "markdown-link-config.json",
-        });
     });
 }
 
