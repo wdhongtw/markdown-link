@@ -1,6 +1,6 @@
 {
   "name": "Markdown Link",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Copy Markdown link for current tab",
   "icons": {
     "128": "images/icon-128.png"
