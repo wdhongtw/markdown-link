@@ -45,3 +45,30 @@ chrome.action.onClicked.addListener(function (tab) {
         args: [tab],
     });
 });
+
+/**
+ * @callback MigrateFunc
+ * @param {Config} config
+ * @return {Config}
+ */
+
+async function migration() {
+    /** @type {MigrateFunc[]} */
+    const steps = [
+        (config) => {
+            if (config.version !== undefined) {
+                return config;
+            }
+            config.version = 1;
+            config.rules = [];
+            return config;
+        },
+    ];
+
+    /** @type Config */
+    const rawConfig = await chrome.storage.sync.get();
+    const config = steps.reduce((config, step) => step(config), rawConfig);
+    await chrome.storage.sync.set(config);
+}
+
+migration();
