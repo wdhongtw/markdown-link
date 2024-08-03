@@ -34,7 +34,18 @@ async function tabToMarkdownLint(tab) {
 
     const link = "[" + title + "](" + tab.url + ")";
 
-    navigator.clipboard.writeText(link);
+    // Avoid using navigator.clipboard, as it requires the document to be focused.
+    function copyToClipboard(textToCopy) {
+      const listener = (event) => {
+        event.clipboardData.setData("text/plain", textToCopy);
+        event.preventDefault();
+      };
+
+      document.addEventListener("copy", listener);
+      document.execCommand("copy");
+      document.removeEventListener("copy", listener);
+    }
+    copyToClipboard(link);
 }
 
 chrome.action.onClicked.addListener(function (tab) {
