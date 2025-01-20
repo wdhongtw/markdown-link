@@ -62,14 +62,13 @@ async function displayBadge(tab: chrome.tabs.Tab) {
     });
 }
 
-async function tabToMarkdownLint(tab: chrome.tabs.Tab) {
+async function generateLink(url: string, title: string): Promise<string> {
     const store = new ConfigStore();
-    let title: string = tab.title!;
 
     const rules = await store.get(keyRules, []);
     for (const rule of rules) {
         const regexUrl = new RegExp(rule.url);
-        if (!regexUrl.test(tab.url!)) continue;
+        if (!regexUrl.test(url)) continue;
 
         const regexSearch = new RegExp(rule.search);
         if (!regexSearch.test(title)) continue;
@@ -78,19 +77,35 @@ async function tabToMarkdownLint(tab: chrome.tabs.Tab) {
         break;
     }
 
-    const link = "[" + title + "](" + tab.url + ")";
-
-    navigator.clipboard.writeText(link);
+    return "[" + title + "](" + url + ")";
 }
 
 chrome.action.onClicked.addListener(function (tab) {
+    if (!tab.id || tab.id === chrome.tabs.TAB_ID_NONE) {
+        return;
+    }
+
     displayBadge(tab);
-    chrome.scripting.executeScript({
-        target: { tabId: tab.id! },
-        func: tabToMarkdownLint as unknown as () => void,
-        args: [tab],
-    });
+    copyMarkdownLink(tab);
 });
+
+async function copyMarkdownLink(tab: chrome.tabs.Tab): Promise<void> {
+    const link = await generateLink(tab.url!, tab.title!);
+
+    // Execute script in the tab to copy the link to clipboard.
+    // The function and argument must be serializable.
+    await chrome.scripting.executeScript({
+        target: { tabId: tab.id! },
+        func: (...rest): void => {
+            // `func` required to be () => void, load argument manually.
+            const link = (rest as unknown[])[0] as string;
+
+            // Clipboard is only available in tabs, not in background script.
+            navigator.clipboard.writeText(link);
+        },
+        args: [link],
+    });
+}
 
 /** Configuration schema of the extension. */
 interface Config {
