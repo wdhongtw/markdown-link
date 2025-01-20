@@ -49,14 +49,14 @@ function delay<T>(t: number, val: T): Promise<T> {
     return new Promise((resolve) => setTimeout(resolve, t, val));
 }
 
-async function displayBadge(tab: chrome.tabs.Tab) {
-    chrome.action.setBadgeText({
+async function displayBadge(tab: chrome.tabs.Tab): Promise<void> {
+    await chrome.action.setBadgeText({
         text: "Done",
         tabId: tab.id,
     });
 
     await delay(1500, null);
-    chrome.action.setBadgeText({
+    await chrome.action.setBadgeText({
         text: "",
         tabId: tab.id,
     });
@@ -85,7 +85,6 @@ chrome.action.onClicked.addListener(function (tab) {
         return;
     }
 
-    displayBadge(tab);
     copyMarkdownLink(tab);
 });
 
@@ -105,6 +104,8 @@ async function copyMarkdownLink(tab: chrome.tabs.Tab): Promise<void> {
         },
         args: [link],
     });
+
+    await displayBadge(tab);
 }
 
 /** Configuration schema of the extension. */
