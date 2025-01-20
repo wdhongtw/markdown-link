@@ -147,5 +147,9 @@ async function migration() {
     ]);
 }
 
-// Run migration every time the extension is loaded
-migration();
+chrome.runtime.onInstalled.addListener(() => {
+    console.log("Extension started");
+
+    migration();
+    console.log("Migration done");
+});
