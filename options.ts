@@ -1,18 +1,4 @@
-interface Rule {
-    url: string;
-    search: string;
-    replace: string;
-};
-
-interface Config {
-    rules: Rule[];
-    version: number;
-};
-
-export type {
-    Config,
-    Rule,
-};
+import * as core from './background.js';
 
 async function initApplication() {
     // Elements
@@ -25,13 +11,15 @@ async function initApplication() {
     const buttonSave = document.getElementById("save-button")!;
     const notificationSaved = document.getElementById("saved-notification")!;
 
+    const store = new core.ConfigStore();
+
     // Initialization
     await (async () => {
-        const config = await chrome.storage.sync.get() as Config;
-        setRules(config.rules);
+        const rules = await store.get(core.keyRules, []);
+        setRules(rules);
     })();
 
-    function setRules(rules: Rule[]) {
+    function setRules(rules: core.Rule[]) {
         // Remove old rules
         const oldRuleNodes = ruleContainer.querySelectorAll(".rule-row");
         for (const ruleNode of oldRuleNodes) {
@@ -61,14 +49,12 @@ async function initApplication() {
     // Events - Save rules
     buttonSave.addEventListener("click", async () => {
         const ruleNodes = ruleContainer.querySelectorAll(".rule-row");
-        const rules = [...ruleNodes].map((ruleNode): Rule => ({
+        const rules = [...ruleNodes].map((ruleNode): core.Rule => ({
             url: (ruleNode.querySelector(".url") as HTMLInputElement).value,
             search: (ruleNode.querySelector(".search") as HTMLInputElement).value,
             replace: (ruleNode.querySelector(".replace") as HTMLInputElement).value,
         }))
-        // @ts-ignore, wrong type here, but still works because StorageArea support partial update
-        const config: Config = { rules: rules };
-        await chrome.storage.sync.set(config);
+        await store.set(core.keyRules, rules);
         notificationSaved.classList.remove("hidden");
         setTimeout(() => notificationSaved.classList.add("hidden"), 1000);
     });
@@ -83,7 +69,7 @@ async function initApplication() {
 
     // Events - Load defaults
     buttonReset.addEventListener("click", () => {
-        const defaultRule: Rule = {
+        const defaultRule: core.Rule = {
             url: ".*",
             search: "(.*)",
             replace: "$1",
