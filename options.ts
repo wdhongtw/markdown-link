@@ -92,8 +92,11 @@ async function initApplication() {
     });
 }
 
+let loaded = false;
+
 document.onreadystatechange = () => {
-    if (document.readyState === "interactive") {
+    if (document.readyState !== "loading" && !loaded) {
         initApplication();
+        loaded = true;
     }
 };
