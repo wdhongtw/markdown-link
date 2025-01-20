@@ -1,8 +1,10 @@
-function delay(t, val) {
+import type { Config } from "./options";
+
+function delay<T>(t: number, val: T): Promise<T> {
     return new Promise((resolve) => setTimeout(resolve, t, val));
 }
 
-async function displayBadge(tab) {
+async function displayBadge(tab: chrome.tabs.Tab) {
     chrome.action.setBadgeText({
         text: "Done",
         tabId: tab.id,
@@ -15,17 +17,15 @@ async function displayBadge(tab) {
     });
 }
 
-async function tabToMarkdownLint(tab) {
-    /** @type {string} */
-    let title = tab.title;
+async function tabToMarkdownLint(tab: chrome.tabs.Tab) {
+    let title: string = tab.title!;
 
-    /** @type {Config} */
-    const config = await chrome.storage.sync.get();
+    const config = await chrome.storage.sync.get() as Config;
     for (const rule of config.rules) {
-        regexUrl = new RegExp(rule.url);
-        if (!regexUrl.test(tab.url)) continue;
+        const regexUrl = new RegExp(rule.url);
+        if (!regexUrl.test(tab.url!)) continue;
 
-        regexSearch = new RegExp(rule.search);
+        const regexSearch = new RegExp(rule.search);
         if (!regexSearch.test(title)) continue;
 
         title = title.replace(regexSearch, rule.replace);
@@ -40,21 +40,18 @@ async function tabToMarkdownLint(tab) {
 chrome.action.onClicked.addListener(function (tab) {
     displayBadge(tab);
     chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: tabToMarkdownLint,
+        target: { tabId: tab.id! },
+        func: tabToMarkdownLint as unknown as () => void,
         args: [tab],
     });
 });
 
-/**
- * @callback MigrateFunc
- * @param {Config} config
- * @return {Config}
- */
+interface MigrateFunc {
+    (config: Config): Config;
+};
 
 async function migration() {
-    /** @type {MigrateFunc[]} */
-    const steps = [
+    const steps: MigrateFunc[] = [
         (config) => {
             if (config.version !== undefined) {
                 return config;
@@ -65,8 +62,7 @@ async function migration() {
         },
     ];
 
-    /** @type Config */
-    const rawConfig = await chrome.storage.sync.get();
+    const rawConfig: Config = await chrome.storage.sync.get() as Config;
     const config = steps.reduce((config, step) => step(config), rawConfig);
     await chrome.storage.sync.set(config);
 }
