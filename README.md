@@ -4,8 +4,17 @@ Generate Markdown link of current tab with one click.
 
 ## Installation
 
-1. pull the project
-2. goto <chrome://extensions/> , (enable Developer mode) and load unpacked extension
+Install from Chrome Web Store:
+[Markdown Link](https://chrome.google.com/webstore/detail/markdown-link/ecbklhnbeilcdabliikhpdanaljlpkhe)
+
+Or you can build from source and load it manually
+
+```shell
+npm install --include dev
+npm run compile
+```
+
+Then goto <chrome://extensions/> , (enable Developer mode) and load unpacked extension
 
 ## Usage
 
