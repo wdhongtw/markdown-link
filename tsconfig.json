@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ES6",
-    "rootDir": "./",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "sourceMap": true,
-    "outDir": "./",
     "strict": true,
     "skipLibCheck": true,
     "types": [
@@ -12,9 +12,6 @@
     ],
   },
   "include": [
-    "**/*.ts",
-  ],
-  "exclude": [
-    "node_modules",
+    "src",
   ],
 }

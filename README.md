@@ -11,10 +11,11 @@ Or you can build from source and load it manually
 
 ```shell
 npm install --include dev
-npm run compile
+make build
 ```
 
 Then goto <chrome://extensions/> , (enable Developer mode) and load unpacked extension
+from the `dist` directory
 
 ## Usage
 

@@ -1,11 +1,19 @@
-.PHONY: all clean
+.PHONY: all build compile clean
 
 all: extension.zip
 
+build: compile manifest.json
+	@mkdir -p dist
+	cp -R public/. dist/
+	cp manifest.json dist/
+
+compile:
+	npm run compile
+
 clean:
-	$(RM) extension.zip
+	$(RM) -r extension.zip dist
 
-SOURCE = background.js options.html options.css options.js
-
-extension.zip: manifest.json README.md images $(SOURCE)
-	zip -r $@ $^
+extension.zip: build
+	$(RM) $@
+	cd dist && zip -r ../$@ . -x '*.map'
+	zip $@ README.md
