@@ -1,7 +1,6 @@
 # Generated file
 
-*.js
-*.js.map
+/dist/
 
 # Logs
 logs
