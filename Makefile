@@ -1,11 +1,11 @@
-.PNONY: all clean
+.PHONY: all clean
 
-all: extionsion.zip
+all: extension.zip
 
 clean:
-	$(RM) extionsion.zip
+	$(RM) extension.zip
 
 SOURCE = background.js options.html options.css options.js
 
-extionsion.zip: manifest.json README.md images $(SOURCE)
+extension.zip: manifest.json README.md images $(SOURCE)
 	zip -r $@ $^
