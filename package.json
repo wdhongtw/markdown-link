@@ -1,10 +1,14 @@
 {
+  "type": "module",
   "devDependencies": {
+    "@types/node": "^24.19.1",
     "chrome-types": "^0.1.333",
-    "typescript": "^5.7.3"
+    "typescript": "^5.9.3"
   },
   "scripts": {
-    "compile": "tsc",
-    "watch": "tsc -w"
+    "compile": "tsc -p tsconfig.build.json",
+    "watch": "tsc -p tsconfig.build.json -w",
+    "typecheck": "tsc",
+    "test": "node --test"
   }
 }
