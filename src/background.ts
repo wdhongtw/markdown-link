@@ -1,6 +1,5 @@
 /** Translation rule for the link text. */
 export interface Rule {
-
     /** Regular expression to match the URL. */
     url: string;
 
@@ -9,11 +8,10 @@ export interface Rule {
 
     /** Replacement pattern for the matched title. */
     replace: string;
-};
+}
 
 /** A generic key type to bind some type to ordinary string key. */
 export class ConfigKey<T> {
-
     /** Unique identifier of the key */
     public id: string;
 
@@ -30,7 +28,6 @@ export const keyRules = new ConfigKey<Rule[]>("rules");
 
 /** Type-safe wrapper around extension storage. */
 export class ConfigStore {
-
     /** Get a value from storage, with fallback value. */
     async get<T>(key: ConfigKey<T>, fallback: T): Promise<T> {
         // Specify key to to a partial query.
@@ -43,7 +40,7 @@ export class ConfigStore {
         // Set is always a partial update.
         await chrome.storage.sync.set({ [key.id]: value });
     }
-};
+}
 
 function delay<T>(t: number, val: T): Promise<T> {
     return new Promise((resolve) => setTimeout(resolve, t, val));
@@ -110,7 +107,6 @@ async function copyMarkdownLink(tab: chrome.tabs.Tab): Promise<void> {
 
 /** Configuration schema of the extension. */
 interface Config {
-
     /** Version of the configuration. */
     version: number;
 
@@ -120,7 +116,7 @@ interface Config {
 
 interface MigrateFunc {
     (config: Config): Config;
-};
+}
 
 async function migration() {
     const steps: MigrateFunc[] = [
@@ -141,6 +137,7 @@ async function migration() {
     };
     const result = steps.reduce((config, step) => step(config), initial);
 
+    // prettier-ignore
     await Promise.all([
         store.set(keyVersion, result.version),
         store.set(keyRules, result.rules),

@@ -1,4 +1,6 @@
-.PHONY: all build compile clean
+.PHONY: all build compile format format-check clean
+
+PRETTIER = npx --yes prettier@3.9.9
 
 all: extension.zip
 
@@ -9,6 +11,12 @@ build: compile manifest.json
 
 compile:
 	npm run compile
+
+format:
+	$(PRETTIER) --write .
+
+format-check:
+	$(PRETTIER) --check .
 
 clean:
 	$(RM) -r extension.zip dist

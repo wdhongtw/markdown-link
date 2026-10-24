@@ -1,4 +1,4 @@
-import * as core from './background.js';
+import * as core from "./background.js";
 
 async function initApplication() {
     // Elements
@@ -53,7 +53,7 @@ async function initApplication() {
             url: (ruleNode.querySelector(".url") as HTMLInputElement).value,
             search: (ruleNode.querySelector(".search") as HTMLInputElement).value,
             replace: (ruleNode.querySelector(".replace") as HTMLInputElement).value,
-        }))
+        }));
         await store.set(core.keyRules, rules);
         notificationSaved.classList.remove("hidden");
         setTimeout(() => notificationSaved.classList.add("hidden"), 1000);
