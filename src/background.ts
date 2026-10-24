@@ -1,3 +1,5 @@
+import { formatLink } from "./markdown.ts";
+
 /** Translation rule for the link text. */
 export interface Rule {
     /** Regular expression to match the URL. */
@@ -74,7 +76,7 @@ async function generateLink(url: string, title: string): Promise<string> {
         break;
     }
 
-    return "[" + title + "](" + url + ")";
+    return formatLink(title, url);
 }
 
 chrome.action.onClicked.addListener(function (tab) {

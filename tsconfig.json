@@ -1,17 +1,24 @@
 {
+  // Covers every TypeScript file, for the editor and type checking.
+  // The extension itself is built with tsconfig.build.json.
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ES6",
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "sourceMap": true,
+    "module": "nodenext",
+    "noEmit": true,
     "strict": true,
     "skipLibCheck": true,
+    // Import with ".ts" so Node can run tests directly; emitted as ".js".
+    "rewriteRelativeImportExtensions": true,
+    // Only syntax that Node's type stripping understands.
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
     "types": [
       "chrome-types",
+      "node",
     ],
   },
   "include": [
     "src",
+    "test",
   ],
 }

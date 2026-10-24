@@ -1,4 +1,4 @@
-import * as core from "./background.js";
+import * as core from "./background.ts";
 
 async function initApplication() {
     // Elements
