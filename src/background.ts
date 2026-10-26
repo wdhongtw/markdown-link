@@ -146,9 +146,13 @@ async function migration() {
     ]);
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-    console.log("Extension started");
+chrome.runtime.onInstalled.addListener(async (details) => {
+    console.log(`Extension installed (reason: ${details.reason})`);
 
-    migration();
-    console.log("Migration done");
+    try {
+        await migration();
+        console.log("Migration done");
+    } catch (error) {
+        console.error("Migration failed", error);
+    }
 });
