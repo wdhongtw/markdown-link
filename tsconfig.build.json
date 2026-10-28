@@ -5,6 +5,9 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "sourceMap": true,
+    "types": [
+      "chrome-types",
+    ],
   },
   "include": [
     "src",
