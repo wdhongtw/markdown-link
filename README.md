@@ -1,35 +1,35 @@
 # Markdown Link Generator
 
-Generate Markdown link of current tab with one click.
+Generate a Markdown link for the current tab with one click.
 
 ## Installation
 
-Install from Chrome Web Store:
+Install from the Chrome Web Store:
 [Markdown Link](https://chrome.google.com/webstore/detail/markdown-link/ecbklhnbeilcdabliikhpdanaljlpkhe)
 
-Or you can build from source and load it manually
+Or you can build from source and load it manually:
 
 ```shell
 npm install --include dev
 make build
 ```
 
-Then goto <chrome://extensions/> , (enable Developer mode) and load unpacked extension
-from the `dist` directory
+Then go to <chrome://extensions/>, enable Developer mode, and load the unpacked extension
+from the `dist` directory.
 
 ## Usage
 
-Assume you are on `google.com`. When your click the extension button, the following
-Markdown text will send into your clipboard.
+Assume you are on `google.com`. When you click the extension button, the following
+Markdown text will be copied to your clipboard.
 
 ``` markdown
 [Google](https://www.google.com/)
 ```
 
-The link text is generated from current tab title.
+The link text is generated from the current tab title.
 
-Use `Alt` + `F` To as a shortcut to activate this action.
-(You can change this key binding in <chrome://extensions/> )
+Use `Alt` + `F` as a shortcut to activate this action.
+(You can change this key binding in <chrome://extensions/>.)
 
 ## Contributors
 
